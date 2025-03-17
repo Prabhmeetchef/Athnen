@@ -38,7 +38,7 @@ export default function EnvelopePopup({ onClose, userEmail, onEnvelopeCreated }:
     "envelope-color": string;
     "envelope-description": string;
     "envelope-numchannel": number;
-    channels: any[];
+    channels: [];
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

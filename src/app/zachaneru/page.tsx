@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { ArrowLeft, Plus, Rss, X as XIcon, Settings } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 import {
@@ -20,7 +20,7 @@ if (!supabaseUrl || !supabaseKey) {
 }
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default function EnvelopeDetailPage() {
+function EnvelopeContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -61,7 +61,7 @@ export default function EnvelopeDetailPage() {
     if (session?.user?.email && envelopeName) {
       fetchEnvelopeDetails();
     }
-  }, [session, envelopeName]);
+  }, [session]);
 
   const fetchEnvelopeDetails = async () => {
     if (!session?.user?.email || !envelopeName) return;
@@ -388,5 +388,12 @@ export default function EnvelopeDetailPage() {
         </section>
       )}
     </div>
+  );
+}
+export default function EnvelopeDetailPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EnvelopeContent />
+    </Suspense>
   );
 }
